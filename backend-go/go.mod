@@ -1,4 +1,5 @@
-module github.com/haik11kashiyani/ai_crm/backend-go
+module backend-go
+
 
 go 1.24.5
 

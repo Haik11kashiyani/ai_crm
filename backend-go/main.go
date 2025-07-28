@@ -9,6 +9,8 @@ import (
 
 	"github.com/joho/godotenv" //for loading environment variables from .env file
 	_"github.com/lib/pq" // for to connect go language  with our postgresql db insort its a driver _ means we are only import it for run init()
+	
+	"backend-go/handlers"
 )
 
 func main(){
@@ -43,38 +45,8 @@ func main(){
 		log.Fatal("db is not responed not connected with the db " , errmess)
 	}
 	
-	http.HandleFunc("/add-customer", func(w http.ResponseWriter , r *http.Request) {
-		
-			name_of_user:="hardik"
-			email:="hardik123@gmail.com"
-			mobile:="1234567890"
-		
-		query:="insert into customers(name,email,mobile) values($1,$2,$3)"
-		_,err:=db.Exec(query,name_of_user,email,mobile)
-		if err!=nil{
-			log.Fatal("problem in query in insert mota bhai",err)
-		}
-		fmt.Fprintln(w,"hellow hardik how are you? from db the db is connected suceesfullys") //this will write the response to the client
-
-	})
-
-	http.HandleFunc("/update",func(w http.ResponseWriter , r *http.Request){
-
-		query:="update customers set name=$1 where id=$2 "
-		newname:="hardik bhai kashiyani"
-		_,err=db.Exec(query,newname, 1)
-		if err !=nil{
-			log.Fatal("update ma vandho 6 vadil ",err)
-		}
-	})
-
-	http.HandleFunc("/delete", func(w http.ResponseWriter, r *http.Request){
-		query:="delete from customers where id=$1"
-		_,err:=db.Exec(query,1)
-		if err!=nil{
-			log.Fatal("delete ma vandho 6 vadil ",err)
-		}
-	})
+	http.HandleFunc("/insert", handlers.InsertCustomer(db))
+	
 	fmt.Println("✅ Server is running on http://localhost:8080")
     log.Fatal(http.ListenAndServe(":8080", nil))
 }
